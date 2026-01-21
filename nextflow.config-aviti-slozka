@@ -1,0 +1,25 @@
+params {
+   workDir = '/mnt/aviti/workflows/AMP/src/work'
+   projectDir = '/mnt/aviti/workflows/AMP/src/project'
+   launchDir = '/mnt/aviti/workflows/AMP/src/launch'
+   homeDir = '/mnt/aviti/workflows/AMP/src'
+   outDirectory = '/mnt/c/Users/User/kamila/WORKFLOWS/AMP/data'
+   inputDirectory = '/mnt/c/Users/User/kamila/WORKFLOWS/AMP/input'
+   projectDirectory = '/mnt/aviti/workflows/AMP/src/project/xsvato01/amp-nextflow_nf'
+   ref = '/mnt/aviti/workflows/references/GRCh37/full_only/GRCh37'
+   refindex = '/mnt/hdd2/reference/kristina/GRCh37/full_only/GRCh37.fa'
+   gatk = '/mnt/aviti/workflows/references/gatk-4.1.8.1/gatk'
+   varbed = '/mnt/aviti/workflows/AMP/src/project/xsvato01/amp-nextflow_nf/beds/AMP-bed.bed'
+   teststrandbias = '/mnt/aviti/workflows/references/vardict/germline/teststrandbias.R'
+   var2vcf_valid = '~/miniconda3/envs/kamila/bin/var2vcf_valid.pl'
+   annovar = '/mnt/aviti/workflows/references/annovar/table_annovar.pl'
+   gene_fullxref.txt = '/mnt/aviti/workflows/references/gene_fullxref.txt'
+   scriptcoverage = '/mnt/aviti/workflows/AMP/src/project/xsvato01/amp-nextflow_nf/scripts/scriptcoverage'
+}
+
+process {
+   errorStrategy = 'finish'
+   process.shell = ['/bin/bash','-e']
+   cpus = 1
+   memory = '1GB'
+}
