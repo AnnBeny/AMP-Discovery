@@ -11,7 +11,7 @@ process TRIMMING {
         script:
         """
         echo TRIMM $name
-        source /home/anna/miniconda3/bin/activate cutadapt
+        source /home/anna/miniconda3/bin/activate cutadapt118
         cutadapt -a CTGTCTCTTATACACATCT -A CTGTCTCTTATACACATCT -o ${name}_R1.trimm.fastq.gz -p ${name}_R2.trimm.fastq.gz $reads -q 30 -m 20
         """
 }
@@ -36,6 +36,25 @@ process ALIGN {
         samtools index ${name}.rmdup.sorted.bam ${name}.rmdup.sorted.bai
 	"""
 }
+
+process FLAGSTAT {
+        tag "FLAGSTAT on $name"
+        publishDir "${params.outDirectory}/${sample.run}/mapped/", mode:'copy'
+
+        input:
+        tuple val(name), val(sample), path(bam), path(bai)
+
+        output:
+        tuple val(name), val(sample), path("${name}.flagstat.txt")
+
+        script:
+        """
+        echo FLAGSTAT $name
+        source /home/anna/miniconda3/bin/activate bwa-samtools
+        samtools flagstat $bam > ${name}.flagstat.txt
+        """
+}
+
 process VARDICT {
         tag "VARDICT on $name" 
         publishDir "${params.outDirectory}/${sample.run}/varianty/", mode:'copy'
@@ -53,6 +72,9 @@ process VARDICT {
         vardict-java -G ${params.refindex} -f 0 -b $bam -N ${name} \
                 -c 1 -S 2 -E 3 -g 4 \
                 ${params.varbed} | Rscript --vanilla ${params.teststrandbias} | perl ${params.var2vcf_valid} -f 0 -N ${name} -A > ${name}.vcf
+        echo using bedfile: ${params.varbed}
+        echo teststrandbias script: ${params.teststrandbias}
+        echo var2vcf_valid script: ${params.var2vcf_valid}
         """
 }
 
